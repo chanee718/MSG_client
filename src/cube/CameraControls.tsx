@@ -1,34 +1,145 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import * as THREE from 'three';
 import { useThree, useFrame } from '@react-three/fiber';
+import { cameraSet } from '../types/datas';
+import { Camera } from '../types/types';
+import { sceneState } from '../types/store';
 
 const CameraControls = () => {
     const { camera } = useThree();
-    const [targetRotationY, setTargetRotationY] = useState(-Math.PI / 2); // 초기 회전 각도
+    const [currentCamera, setCurrentCamera] = useState<Camera>(cameraSet.camera1);
+    const [previousCamera, setPreviousCamera] = useState<Camera>(cameraSet.camera1);
     const rotationSpeed = 0.1;
 
-    useFrame(() => {
-        // 현재 카메라의 Y축 회전과 목표 회전 각도의 차이 계산
-        const deltaRotationY = targetRotationY - camera.rotation.y;
-        
-        // 목표 회전에 부드럽게 도달하기 위한 회전
-        camera.rotation.y += deltaRotationY * rotationSpeed;
-        
-        // 회전 각도 정규화
-        camera.rotation.y %= 2 * Math.PI;
-    });
-
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
-        switch (event.key) {
-            case 'ArrowLeft':
-                setTargetRotationY(prev => prev + Math.PI * 5); // Rotate left by 90 degrees
-                break;
-            case 'ArrowRight':
-                setTargetRotationY(prev => prev - Math.PI * 5); // Rotate right by 90 degrees
-                break;
-            // Implement handling for ArrowUp and ArrowDown if needed
+        if (sceneState.isMoving) {
+            return; // 이동 중이면 새로운 이동 무시
         }
-    }, [setTargetRotationY]); 
+        if (currentCamera === cameraSet.camera1) {  // white
+            switch (event.key) {
+                case 'ArrowLeft':
+                    // sceneState.camera = cameraSet.camera6;
+                    // setCurrentCamera(cameraSet.camera6);
+                    sceneState.camera = cameraSet.camera6;
+                    setCurrentCamera(cameraSet.camera6);
+                    break;
+                case 'ArrowRight':
+                    sceneState.camera = cameraSet.camera5;
+                    setCurrentCamera(cameraSet.camera5);
+                    break;
+                case 'ArrowUp':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera3;
+                    setCurrentCamera(cameraSet.camera3);
+                    setPreviousCamera(cameraSet.camera1);
+                    break;
+                case 'ArrowDown':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera4;
+                    setCurrentCamera(cameraSet.camera4);
+                    setPreviousCamera(cameraSet.camera1);
+                    break;
+            }
+        }
+
+        if (currentCamera === cameraSet.camera2) {  // green
+            switch (event.key) {
+                case 'ArrowLeft':
+                    sceneState.camera = cameraSet.camera5;
+                    setCurrentCamera(cameraSet.camera5);
+                    break;
+                case 'ArrowRight':
+                    sceneState.camera = cameraSet.camera6;
+                    setCurrentCamera(cameraSet.camera6);
+                    break;
+                case 'ArrowUp':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera3;
+                    setCurrentCamera(cameraSet.camera3);
+                    setPreviousCamera(cameraSet.camera2);
+                    break;
+                case 'ArrowDown':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera4;
+                    setCurrentCamera(cameraSet.camera4);
+                    setPreviousCamera(cameraSet.camera2);
+                    break;
+            }
+        }
+
+        if (currentCamera === cameraSet.camera5) {  // cyan
+            switch (event.key) {
+                case 'ArrowLeft':
+                    sceneState.camera = cameraSet.camera1;
+                    setCurrentCamera(cameraSet.camera1);
+                    break;
+                case 'ArrowRight':
+                    sceneState.camera = cameraSet.camera2;
+                    setCurrentCamera(cameraSet.camera2);
+                    break;
+                case 'ArrowDown':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera4;
+                    setCurrentCamera(cameraSet.camera4);
+                    setPreviousCamera(cameraSet.camera5);
+                    break;
+                case 'ArrowUp':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera3;
+                    setCurrentCamera(cameraSet.camera3);
+                    setPreviousCamera(cameraSet.camera5);
+                    break;
+            }
+        }
+
+        if (currentCamera === cameraSet.camera6) {  // white
+            switch (event.key) {
+                case 'ArrowLeft':
+                    // sceneState.camera = cameraSet.camera6;
+                    // setCurrentCamera(cameraSet.camera6);
+                    sceneState.camera = cameraSet.camera2;
+                    setCurrentCamera(cameraSet.camera2);
+                    break;
+                case 'ArrowRight':
+                    sceneState.camera = cameraSet.camera1;
+                    setCurrentCamera(cameraSet.camera1);
+                    break;
+                case 'ArrowUp':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera3;
+                    setCurrentCamera(cameraSet.camera3);
+                    setPreviousCamera(cameraSet.camera6);
+                    break;
+                case 'ArrowDown':
+                    sceneState.isMoving = true;
+                    sceneState.camera = cameraSet.camera4;
+                    setCurrentCamera(cameraSet.camera4);
+                    setPreviousCamera(cameraSet.camera6);
+                    break;
+            }
+        }
+
+        if (currentCamera === cameraSet.camera3) {  // white
+            switch (event.key) {
+                case 'ArrowDown':
+                    sceneState.isMoving = true;
+                    sceneState.camera = previousCamera;
+                    setCurrentCamera(previousCamera);
+                    break;
+            }
+        }
+
+        if (currentCamera === cameraSet.camera4) {  // white
+            switch (event.key) {
+                case 'ArrowUp':
+                    sceneState.isMoving = true;
+                    sceneState.camera = previousCamera;
+                    setCurrentCamera(previousCamera);
+                    break;
+            }
+        }
+
+    }, [currentCamera]); 
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
