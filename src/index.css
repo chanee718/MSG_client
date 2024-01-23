@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "ExtraThin";
+  src: url(./fonts/font010.ttf);
+}
+
+@font-face {
+  font-family: "Thin";
+  src: url(./fonts/font020.ttf);
+}
+
+@font-face {
+  font-family: "Regular";
+  src: url(./fonts/font030.ttf);
+}
+
+@font-face {
+  font-family: "Bold";
+  src: url(./fonts/font040.ttf);
+}
+
+@font-face {
+  font-family: "ExtraBold";
+  src: url(./fonts/font050.ttf);
+}
