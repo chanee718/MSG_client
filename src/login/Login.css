@@ -1,0 +1,122 @@
+.Login {
+    background: 'transparent';
+    /* background: linear-gradient(165deg, #9795f0, #fbc8d4); */
+    text-align: center;
+    display: flex;
+  }
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 25rem;
+    margin-left: 4%;
+    margin-top: 2%;
+}
+
+.login-form h1 {
+    font-family: ExtraBold;
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+    text-align: left;
+    color: #fff;
+}
+
+.login-form label {
+    display: block;
+    text-align: left;
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group input, label {
+    box-sizing: border-box; /* padding과 border를 너비에 포함 */
+    width: 100%;
+}
+
+.form-group label {
+    font-family: Regular;
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 1rem; /* 텍스트 크기를 늘립니다 */
+    font-weight: bold; /* 텍스트를 굵게 합니다 */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    border-radius: 3px;
+}
+
+.remember-me {
+    font-family: Thin;
+    margin-left: -0.2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remember-me label {
+    margin-left: 0.5rem;
+}
+
+.remember-me button {
+    width: 15rem;
+    margin-right: -1.5rem;
+    margin-top: 0.2rem;
+    background-color: transparent;
+    font-size: 0.9rem;
+    border: none;
+    color: #92B2F2;
+    font-family: Regular;
+}
+.remember-me button span:hover{
+    color: #92B2F2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.login button {
+    width: 100%;
+    margin-top: 2.5rem;
+    padding: 10px;
+    background-color: rgb(64, 64, 105);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Bold;
+    font-size: 1rem; /* 텍스트 크기를 늘립니다 */
+}
+
+.login button:hover {
+    background-color: rgb(49, 49, 88);
+}
+
+.join {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+}
+
+.join button {
+    margin-top: 0.2rem;
+    margin-left: 0.5rem;
+    background-color: transparent;
+    font-size: 0.9rem;
+    border: none;
+    color: #92B2F2;
+}
+
+.join button span:hover{
+    color: #92B2F2;
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -1,0 +1,73 @@
+.arrow-container {
+    position: fixed;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border-radius: 0 50px 50px 0;
+}
+
+.arrow-container:hover, .arrow-container:hover .arrow {
+    opacity: 1;
+}
+
+.left, .right {
+    top: 0;
+    bottom: 0;
+    width: 15%; /* 좌우 상자의 너비 */
+}
+
+.left {
+    left: 0;
+    background: radial-gradient(circle at left, rgba(0, 0, 0, 0.1), transparent);
+    border-radius: 0 70% 70% 0;
+}
+
+.right {
+    right: 0;
+    background: radial-gradient(circle at right, rgba(0, 0, 0, 0.1), transparent);
+    border-radius: 70% 0 0 70%;
+}
+
+.up, .down {
+    left: 0;
+    right: 0;
+    height: 12%; /* 상하 상자의 높이 */
+}
+
+.up {
+    top: 0;
+    background: radial-gradient(circle at top, rgba(0, 0, 0, 0.1), transparent);
+    border-radius: 0 0 100% 100%;
+}
+
+.down {
+    bottom: 0;
+    background: radial-gradient(circle at bottom, rgba(0, 0, 0, 0.1), transparent);
+    border-radius: 70% 70% 0 0;
+}
+
+.arrow {
+    position: fixed;
+    font-size: 3rem;
+    color: #000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+.arrow-left {
+    left: 2%; 
+    top: 50%; 
+}
+.arrow-right { 
+    right: 2%; 
+    top: 50%; 
+}
+.arrow-up { 
+    top: 2%; 
+    left: 50%; 
+}
+.arrow-down { 
+    bottom: 2%; 
+    left: 50%; 
+}
+.icon {
+    opacity: 0.1;
+    pointer-events: none;
+}
