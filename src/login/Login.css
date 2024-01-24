@@ -72,11 +72,10 @@
     background-color: transparent;
     font-size: 0.9rem;
     border: none;
-    color: #92B2F2;
-    font-family: Regular;
+    color: orangered;
 }
 .remember-me button span:hover{
-    color: #92B2F2;
+    color: rgb(207, 55, 0);
     text-decoration: underline;
     cursor: pointer;
 }
@@ -85,7 +84,7 @@
     width: 100%;
     margin-top: 2.5rem;
     padding: 10px;
-    background-color: rgb(64, 64, 105);
+    background-color: orangered;
     color: white;
     border: none;
     border-radius: 5px;
@@ -95,7 +94,7 @@
 }
 
 .login button:hover {
-    background-color: rgb(49, 49, 88);
+    background-color: rgb(207, 55, 0);
 }
 
 .join {
@@ -112,11 +111,11 @@
     background-color: transparent;
     font-size: 0.9rem;
     border: none;
-    color: #92B2F2;
+    color: orangered;
 }
 
 .join button span:hover{
-    color: #92B2F2;
+    color: rgb(207, 55, 0);
     text-decoration: underline;
     cursor: pointer;
 }

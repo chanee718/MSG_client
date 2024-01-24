@@ -62,6 +62,7 @@
 
 .bottom {
     margin-top: 3%;
+    width: 45vw; /* 전체 너비 사용 */
 }
 
 .videotitle {
@@ -79,6 +80,7 @@
 }
 
 .video {
+    width: 100%;
     display: flex; /* Flexbox 레이아웃 사용 */
     overflow-x: auto; /* 가로 스크롤 허용 */
     gap: 10px; /* 비디오 사이의 간격 */
@@ -89,5 +91,27 @@
     flex: none; /* 비디오 항목의 크기가 변하지 않도록 설정 */
     width: 200px; /* 비디오의 너비 */
     height: 120px; /* 비디오의 높이 */
+    object-fit: cover;
     background-color: #eee; /* 배경색, 실제 비디오가 있을 때는 제거해야 함 */
 }
+
+.video::-webkit-scrollbar {
+    height: 5px; /* 스크롤 바의 너비 */
+}
+
+/* 스크롤 바 핸들 (가로/세로) */
+.video::-webkit-scrollbar-thumb {
+    background-color: orangered; /* 핸들의 색상 */
+    border-radius: 10px; /* 핸들의 둥근 모서리 */
+    border: 0.1px solid #FFFFFF; /* 핸들 주변의 테두리 */
+}
+
+/* 스크롤 바 트랙 */
+.video::-webkit-scrollbar-track {
+    background: #FFFFFF; /* 트랙의 배경색 */
+    border-radius: 10px; /* 트랙의 둥근 모서리 */
+}
+
+.custom-icon-button:hover {
+    color: orangered;
+  }
