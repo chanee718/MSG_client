@@ -18,6 +18,7 @@ import Join from '../login/Join';
 import MyPage from '../login/MyPage';
 import { useAuth } from '../types/AuthContext';
 import Carousel from './Carousel';
+import LightsComponent from '../shapes/LightsComponent';
 
 type TextMeshProps = {
     text: string;
@@ -67,6 +68,12 @@ const Cube = () => {
         up: false,
         down: false,
     });
+    const [showIndices, setShowIndices] = useState({
+        left: '',
+        right: '',
+        up: '',
+        down: '',
+    });
     const [ currentCamera, setCurrentCamera ] = useState<Camera>(cameraSet.camera1);
     const [previousCamera, setPreviousCamera] = useState<Camera>(cameraSet.camera1);
     const [showMesh1, setShowMesh1] = useState(false);
@@ -100,29 +107,56 @@ const Cube = () => {
     const updateArrows = useCallback(() => {
         // 현재 카메라 상태에 따라 화살표 상태 업데이트
         let arrows = { left: false, right: false, up: false, down: false };
+        let indices = { left: '', right: '', up: '', down: '' }
         switch (currentCamera) {
             case cameraSet.camera1:
-                arrows = { left: true, right: true, up: true, down: true };
+                arrows = { left: false, right: false, up: false, down: false };
+                indices = { left: '', right: '', up: '', down: '' }
                 break;
             case cameraSet.camera2:
                 arrows = { left: true, right: true, up: true, down: true };
+                indices = { left: 'Drum', right: 'Keyboard', up: 'Guitar', down: 'Bass' }
                 break;
-            // ... 다른 카메라 상태에 대한 케이스 ...
             case cameraSet.camera3:
                 arrows = { left: false, right: false, up: false, down: true };
+                switch(previousCamera) {
+                    case cameraSet.camera2:
+                        indices = { left: '', right: '', up: '', down: 'Band' }
+                        break;
+                    case cameraSet.camera5:
+                        indices = { left: '', right: '', up: '', down: 'Drum' }
+                        break;
+                    case cameraSet.camera6:
+                        indices = { left: '', right: '', up: '', down: 'KeyBoard' }
+                        break;
+                }
                 break;
             case cameraSet.camera4:
                 arrows = { left: false, right: false, up: true, down: false };
+                switch(previousCamera) {
+                    case cameraSet.camera2:
+                        indices = { left: '', right: '', up: 'Band', down: '' }
+                        break;
+                    case cameraSet.camera5:
+                        indices = { left: '', right: '', up: 'Drum', down: '' }
+                        break;
+                    case cameraSet.camera6:
+                        indices = { left: '', right: '', up: 'KeyBoard', down: '' }
+                        break;
+                }
                 break;
             case cameraSet.camera5:
-                arrows = { left: true, right: true, up: true, down: true };
+                arrows = { left: false, right: true, up: true, down: true };
+                indices = { left: '', right: 'Band', up: 'Guitar', down: 'Bass' }
                 break;
             case cameraSet.camera6:
-                arrows = { left: true, right: true, up: true, down: true };
+                arrows = { left: true, right: false, up: true, down: true };
+                indices = { left: 'Band', right: '', up: 'Guitar', down: 'Bass' }
                 break;
         }
         setShowArrows(arrows);
-    }, [currentCamera, setShowArrows]);
+        setShowIndices(indices)
+    }, [currentCamera, setShowArrows, previousCamera, setShowIndices]);
 
     useEffect(() => {
         updateArrows();
@@ -341,16 +375,6 @@ const Cube = () => {
         if (currentCamera === cameraSet.camera5) {  // cyan
             setAngle(0);
             switch (event.key) {
-                case 'ArrowLeft':
-                    if (!isLoggedIn) {
-                        // 로그인하지 않았다면 이동을 수행하지 않음
-                        alert("Please Log In First!");
-                        console.log("You must be logged in to move the camera.");
-                        return;
-                    }
-                    sceneState.camera = cameraSet.camera1;
-                    setCurrentCamera(cameraSet.camera1);
-                    break;
                 case 'ArrowRight':
                     if (!isLoggedIn) {
                         // 로그인하지 않았다면 이동을 수행하지 않음
@@ -402,16 +426,6 @@ const Cube = () => {
                     // setCurrentCamera(cameraSet.camera6);
                     sceneState.camera = cameraSet.camera2;
                     setCurrentCamera(cameraSet.camera2);
-                    break;
-                case 'ArrowRight':
-                    if (!isLoggedIn) {
-                        // 로그인하지 않았다면 이동을 수행하지 않음
-                        alert("Please Log In First!");
-                        console.log("You must be logged in to move the camera.");
-                        return;
-                    }
-                    sceneState.camera = cameraSet.camera1;
-                    setCurrentCamera(cameraSet.camera1);
                     break;
                 case 'ArrowUp':
                     if (!isLoggedIn) {
@@ -476,20 +490,23 @@ const Cube = () => {
 
     const handleSpaceBar = useCallback(() => {
         if (!isLoggedIn) {
-            // 로그인하지 않았다면 이동을 수행하지 않음
             alert("Please Log In First!");
             console.log("You must be logged in to move the camera.");
             return;
         }
         if (currentCamera === cameraSet.camera1) {
-            sceneState.camera = cameraSet.camera2;
-            setCurrentCamera(cameraSet.camera2);
+            if(currentPage === PageState.Main){
+                sceneState.camera = cameraSet.camera2;
+                setCurrentCamera(cameraSet.camera2);
+            } else {
+                return;
+            }
         }
         if (currentCamera === cameraSet.camera2 || currentCamera === cameraSet.camera3 || currentCamera === cameraSet.camera4 || currentCamera === cameraSet.camera5 || currentCamera === cameraSet.camera6){
             sceneState.camera = cameraSet.camera1;
             setCurrentCamera(cameraSet.camera1);
         }
-    }, [currentCamera, isLoggedIn]);
+    }, [currentCamera, isLoggedIn, currentPage]);
 
     const handlePlaneClick = useCallback(() => {
         if (!isLoggedIn) {
@@ -499,10 +516,14 @@ const Cube = () => {
             return;
         }
         if (currentCamera === cameraSet.camera1) {
-            sceneState.camera = cameraSet.camera2;
-            setCurrentCamera(cameraSet.camera2);
+            if(currentPage === PageState.Main){
+                sceneState.camera = cameraSet.camera2;
+                setCurrentCamera(cameraSet.camera2);
+            } else {
+                return;
+            }
         }
-    }, [currentCamera, isLoggedIn]);
+    }, [currentCamera, isLoggedIn, currentPage]);
 
     // 키보드 이벤트 리스너 업데이트
     useEffect(() => {
@@ -641,7 +662,7 @@ const Cube = () => {
             <Canvas camera={{ position: [0, 0, 0], fov: 80 }} >
                 <CameraAnimation />
                 <OrbitControls enableZoom={false} enableRotate={false}/>
-                <pointLight position={[0, 0, 0]} color="#FFFFFF" intensity={3000} castShadow={true} />
+                <pointLight position={[0, 0, 0]} color="#FFFFFF" intensity={1000} castShadow={true} />
                 {faces.map((face, index) => (
                     <group key={index}>
                         <mesh key={index} position={face.position as [number, number, number]} rotation={face.rotation as [number, number, number]}>
@@ -653,6 +674,7 @@ const Cube = () => {
                 ))}
                 {showMesh1 && (
                     <>
+                        <pointLight position={[0, 0, 0]} color="#FFFFFF" intensity={1000} castShadow={true} />
                         <animated.mesh 
                             position={[14, 0, 0]} 
                             rotation={[0, -Math.PI / 2, 0]}
@@ -666,36 +688,51 @@ const Cube = () => {
                     </>
                 )}
                 {showMesh2 && (
-                    <animated.mesh scale={meshSpring2.scale} >
-                        <Carousel planes={planes} position={[-14, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
-                    </animated.mesh>
+                    <>
+                        <LightsComponent colors={[0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0x00ffff, 0xff00ff]}/>
+                        <animated.mesh scale={meshSpring2.scale} >
+                            <Carousel planes={planes} position={[-14, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
+                        </animated.mesh>
+                    </>
                 )}
                 {showMesh3 && (
-                    <animated.mesh scale={meshSpring3.scale} >
-                        <Carousel planes={planes} position={[0, 14, 0]} rotation={[Math.PI / 2, 0, angle]} />
-                    </animated.mesh>
+                    <>
+                        <LightsComponent colors={[0xFFFFFF, 0xFF5733, 0x733D31, 0x6A452C, 0xA2684B, 0x3D2217]}/>
+                        <animated.mesh scale={meshSpring3.scale} >
+                            <Carousel planes={planes} position={[0, 14, 0]} rotation={[Math.PI / 2, 0, angle]} />
+                        </animated.mesh>
+                    </>
                 )}
                 {showMesh4 && (
-                    <animated.mesh scale={meshSpring4.scale} >
-                        <Carousel planes={planes} position={[0, -14, 0]} rotation={[-Math.PI / 2, 0, angle]} />
-                    </animated.mesh>
+                    <>
+                        <LightsComponent colors={[0x5F85BB, 0xFFFFFF, 0x05264E, 0x1A237E, 0x303F9F, 0x9FA8DA]}/>
+                        <animated.mesh scale={meshSpring4.scale} >
+                            <Carousel planes={planes} position={[0, -14, 0]} rotation={[-Math.PI / 2, 0, angle]} />
+                        </animated.mesh>
+                    </>
                 )}
                 {showMesh5 && (
-                    <animated.mesh scale={meshSpring5.scale} >
-                        <Carousel planes={planes} position={[0, 0, 14]} rotation={[0, Math.PI, 0]} />
-                    </animated.mesh>
+                    <>
+                        <LightsComponent colors={[0xF2AF06, 0xFFFFFF, 0xFDE06B, 0x999698, 0xFDC411, 0xC8C5C2]}/>
+                        <animated.mesh scale={meshSpring5.scale} >
+                            <Carousel planes={planes} position={[0, 0, 14]} rotation={[0, Math.PI, 0]} />
+                        </animated.mesh>
+                    </>
                 )}
                 {showMesh6 && (
-                    <animated.mesh scale={meshSpring6.scale} >
-                        <Carousel planes={planes} position={[0, 0, -14]} rotation={[0, 0, 0]} />
-                    </animated.mesh>
+                    <>
+                        <LightsComponent colors={[0x69F0AE, 0x76FF03, 0x388E3C, 0xFFFFFF, 0xC6FF00, 0xB9F6CA]}/>
+                        <animated.mesh scale={meshSpring6.scale} >
+                            <Carousel planes={planes} position={[0, 0, -14]} rotation={[0, 0, 0]} />
+                        </animated.mesh>
+                    </>
                 )}
                 {/* <lineSegments>
                     <edgesGeometry attach="geometry" args={[new THREE.BoxGeometry(sideSize-0.1, sideSize-0.1, sideSize-0.1)]} />
                     <lineBasicMaterial attach="material" color="black" side={THREE.DoubleSide} linewidth={5} />
                 </lineSegments> */}
             </Canvas>
-            <ArrowDisplay showArrows={showArrows} onRotate={rotateCamera} currentCamera={currentCamera}/>
+            <ArrowDisplay showArrows={showArrows} showIndices={showIndices} onRotate={rotateCamera} currentCamera={currentCamera}/>
         </div>
     );
 };

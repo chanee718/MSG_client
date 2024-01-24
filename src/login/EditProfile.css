@@ -1,0 +1,152 @@
+.EP {
+    background: 'transparent';
+    /* background: linear-gradient(165deg, #9795f0, #fbc8d4); */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+.EPtop {
+    display: flex; /* flexbox 레이아웃 사용 */
+    justify-content: center; /* 양 끝에 요소 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+    width: 45vw; /* 전체 너비 사용 */
+    padding: 0 10px; /* 좌우 패딩 */
+  }
+  
+.EPtop h2 {
+    margin: 0; /* h2의 기본 마진 제거 */
+    color: white;
+    white-space: nowrap;
+    font-family: ExtraBold;
+    font-size: 2rem;
+  }
+
+
+
+.EPbody {
+    display: flex; /* flexbox 레이아웃 사용 */
+    justify-content: flex-start;
+    margin-top: 10%;
+}
+
+.image-container {
+    margin-left: 5%;
+    margin-top: 3%;
+    width: 40%;
+    height: 40%;
+    position: relative;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    left:0;
+    object-fit: cover;
+}
+
+.edit-button {
+    position: absolute;
+    right: 0; /* 오른쪽 끝에 위치 */
+    bottom: 0; /* 아래쪽 끝에 위치 */
+    width: 30px; /* 버튼의 크기 */
+    height: 30px; /* 버튼의 높이 */
+    background-color: orangered;
+}
+
+.edit {
+    width: 100%;
+}
+
+.editname {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    margin-left: 5%;
+    text-align: left;
+}
+
+.en .MuiInputBase-root {
+    color: white; /* 텍스트 필드 내부 텍스트 색상 */
+}
+
+.en .MuiInput-underline:before {
+    border-bottom: 1px solid white; /* 기본 하단선 색상 */
+}
+
+.en .MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom: 2px solid white; /* 마우스 오버 시 하단선 색상 */
+}
+
+.en .MuiInput-underline:after {
+    border-bottom: 2px solid white; /* 포커스 시 하단선 색상 */
+}
+
+/* 레이블 색상 설정 */
+.en .MuiInputLabel-root {
+    color: white; /* 기본 레이블 색상 */
+}
+
+.en .MuiInputLabel-root.Mui-focused {
+    color: white; /* 포커스 시 레이블 색상 */
+}
+
+/* Placeholder 색상 설정 */
+.en .MuiInputBase-input::placeholder {
+    color: white;
+    opacity: 1; /* 플레이스홀더 텍스트의 불투명도 */
+}
+
+.en + .en {
+    margin-left: 5%;
+}
+
+.ol .MuiInputBase-root {
+    color: white; /* 텍스트 필드 내부 텍스트 색상 */
+}
+
+.ol .MuiInput-underline:before {
+    border-bottom: 1px solid white; /* 기본 하단선 색상 */
+}
+
+.ol .MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom: 2px solid white; /* 마우스 오버 시 하단선 색상 */
+}
+
+.ol .MuiInput-underline:after {
+    border-bottom: 2px solid white; /* 포커스 시 하단선 색상 */
+}
+
+/* 레이블 색상 설정 */
+.ol .MuiInputLabel-root {
+    color: white; /* 기본 레이블 색상 */
+}
+
+.ol .MuiInputLabel-root.Mui-focused {
+    color: white; /* 포커스 시 레이블 색상 */
+}
+
+/* Placeholder 색상 설정 */
+.ol .MuiInputBase-input::placeholder {
+    color: white;
+    opacity: 1; /* 플레이스홀더 텍스트의 불투명도 */
+}
+
+.oneliner {
+    width: 100%;
+    margin-top: 5%;
+    text-align: left;
+    margin-left: 13.5%;
+}
+
+.ol {
+    width: 78%;
+}
+
+.EPbottom {
+    margin-top: 10%;
+}
+

@@ -19,12 +19,41 @@ type MyPageProps = {
 };
 
 const MyPage: React.FC<MyPageProps> = ({ position, onChangePage }) => {
+  
+  const imageList = [
+    '/images/image1.jpg',
+    '/images/image2.png',
+    '/images/image3.jpg',
+    '/images/image4.jpg',
+    '/images/image5.jpg',
+    '/images/image6.jpg',
+    '/images/image7.jpg',
+    '/images/image8.jpg',
+    '/images/image9.jpg',
+    '/images/image10.jpg',
+    '/images/image11.jpg',
+    '/images/image12.jpg',
+    '/images/image13.jpg',
+    '/images/image14.jpg',
+    '/images/image15.jpg',
+  ];
+
   return (
-    <Html position={position} style={{ transform: "translate(-50%, -70%)" }}>
+    <Html position={position} style={{ transform: "translate(-50%, -50%)" }}>
         <div className="MyPage">
           <div className="top">
             <h2>My Workspace</h2>
-            <IconButton aria-label="editprofile" onClick={() => onChangePage(PageState.EditProfile)} style={{ color: "#FFFFFF", marginRight: '3%' }}>
+            <IconButton 
+              aria-label="editprofile" 
+              onClick={() => onChangePage(PageState.EditProfile)} 
+              sx={{
+                color: '#FFFFFF', // 기본 색상
+                marginRight: '3%',
+                '&:hover': {
+                  color: 'orangered', // 호버 시 색상 변경
+                },
+              }}
+               >
               <Edit />
             </IconButton>
             <Logout />
@@ -39,11 +68,14 @@ const MyPage: React.FC<MyPageProps> = ({ position, onChangePage }) => {
           <div className='bottom'>
             <div className='videotitle'>
               <h2>내 동영상</h2>
-              <IconButton aria-label="addvideo" onClick={() => onChangePage(PageState.AddVideo)} style={{ color: "#FFFFFF", marginBottom: '0.5%' }} size="large">
+              <IconButton aria-label="addvideo" onClick={() => onChangePage(PageState.AddVideo)} sx ={{ color: "#FFFFFF", marginBottom: '0.5%', '&:hover': { color: 'orangered' } }}  size="large">
                 <AddBox />
               </IconButton>
             </div>
             <div className='video'>
+              {imageList.map((image, index) => (
+                <img key={index} src={image} alt={`Video ${index}`} className="video-item" />
+              ))}
             </div>
           </div>
         </div>

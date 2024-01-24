@@ -12,11 +12,17 @@ interface ArrowDisplayProps {
       up: boolean;
       down: boolean;
     };
+    showIndices: {
+      left: string;
+      right: string;
+      up: string;
+      down: string;
+    }
     onRotate: (direction: string, camera: Camera) => void;
     currentCamera: Camera;
   }
 
-const ArrowDisplay: React.FC<ArrowDisplayProps> = ({ showArrows, onRotate, currentCamera }) => {
+const ArrowDisplay: React.FC<ArrowDisplayProps> = ({ showArrows, showIndices, onRotate, currentCamera }) => {
   const icons = {
         up: faChevronUp,
         down: faChevronDown,
@@ -28,21 +34,25 @@ const ArrowDisplay: React.FC<ArrowDisplayProps> = ({ showArrows, onRotate, curre
       {showArrows.left && (
         <div className='arrow-container left' onClick={() => onRotate('left', currentCamera)}>
           <Arrow direction="left" onRotate={onRotate} currentCamera={currentCamera}/>
+          <span className={`arrow-text l`}>{showIndices.left}</span>
         </div>
       )}
       {showArrows.right && (
         <div className='arrow-container right' onClick={() => onRotate('right', currentCamera)}>
           <Arrow direction="right" onRotate={onRotate} currentCamera={currentCamera}/>
+          <span className={`arrow-text r`}>{showIndices.right}</span>
         </div>
       )}
       {showArrows.up && (
         <div className='arrow-container up' onClick={() => onRotate('up', currentCamera)}>
           <Arrow direction="up" onRotate={onRotate} currentCamera={currentCamera}/>
+          <span className={`arrow-text u`}>{showIndices.up}</span>
         </div>
       )}
       {showArrows.down && (
         <div className='arrow-container down' onClick={() => onRotate('down', currentCamera)}>
           <Arrow direction="down" onRotate={onRotate} currentCamera={currentCamera}/>
+          <span className={`arrow-text d`}>{showIndices.down}</span>
         </div>
       )}
       {showArrows.up && <FontAwesomeIcon icon={icons['up']} className={`arrow arrow-up icon`} />}
