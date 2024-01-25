@@ -1,16 +1,14 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as THREE from 'three';
 import { cameraSet } from '../types/datas';
 import { Camera } from '../types/types';
 import { sceneState } from '../types/store';
-import { Canvas, useLoader, useThree, useFrame } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { CameraAnimation } from './CameraAnimation';
 import ArrowDisplay from './ArrowDisplay';
 import AddVideo from '../login/AddVideo';
 import EditProfile from '../login/EditProfile';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { useSpring, animated } from '@react-spring/three';
 import RoundedPlane from '../shapes/RoundedPlane'
 import Login from '../login/Login';
@@ -19,34 +17,12 @@ import MyPage from '../login/MyPage';
 import { useAuth } from '../types/AuthContext';
 import Carousel from './Carousel';
 import LightsComponent from '../shapes/LightsComponent';
-
-type TextMeshProps = {
-    text: string;
-    position: [number, number, number];
-    rotation: [number, number, number];
-    color: string;
-  };
+import axios from "axios";
 
 type Face = {
     position: [number, number, number];
     rotation: [number, number, number];
     color: string;
-};
-
-const TextMesh: React.FC<TextMeshProps> = ({ text, position, rotation, color }) => {
-    const font = useLoader(FontLoader, 'fonts/font030.json');
-    const textGeometry = new TextGeometry(text, {
-        font,
-        size: 3,
-        height: 0.01,
-    });
-
-    return (
-        <mesh position={position} rotation={rotation}>
-            <primitive attach="geometry" object={textGeometry} />
-            <meshStandardMaterial attach="material" color={color} />
-        </mesh>
-    );
 };
 
 enum PageState {
@@ -87,6 +63,7 @@ const Cube = () => {
 
     const { isLoggedIn } = useAuth();
     const [currentPage, setCurrentPage] = useState<PageState>(PageState.Main);
+    const [videos, setVideos] = useState<any[]>([]);
 
     // useEffect(() => {
     //     updateLoginStatus();
@@ -647,6 +624,41 @@ const Cube = () => {
         { position: [0, 0, -halfSideSize], rotation: [0, 0, 0], color: '#FFEFEF' } // -z pink
     ];
 
+    useEffect(() => {
+        let genre: string;
+        switch (currentCamera) {
+            case cameraSet.camera2:
+                genre = '밴드'
+                break;
+            case cameraSet.camera3:
+                genre = '기타'
+                break;
+            case cameraSet.camera4:
+                genre = '베이스'
+                break;
+            case cameraSet.camera5:
+                genre = '드럼'
+                break;
+            case cameraSet.camera6:
+                genre = '키보드'
+                break;
+        }
+            
+        const fetchVideo = async () => {
+          try {
+            console.log(genre);
+            const endpoint: string = `http://172.10.7.58:80/contents/getgenrecontents?genre=${genre}`;
+            const response = await axios.get(endpoint);
+            if (response.data) {
+                setVideos(response.data);
+              }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+        fetchVideo();
+      }, [currentCamera]);
+
     const planes = [
         { width: 40, height: 27, radius: 1, color: '#000000', opacity: 0.8 },
         { width: 40, height: 27, radius: 1, color: '#000000', opacity: 0.8 },
@@ -669,12 +681,10 @@ const Cube = () => {
                             <planeGeometry attach="geometry" args={[sideSize, sideSize]} />
                             <meshLambertMaterial attach="material" color={face.color} />
                         </mesh>
-                        <TextMesh text={`face #${index+1}`} position={face.position} rotation={face.rotation} color="black" />
                     </group>
                 ))}
                 {showMesh1 && (
                     <>
-                        <pointLight position={[0, 0, 0]} color="#FFFFFF" intensity={1000} castShadow={true} />
                         <animated.mesh 
                             position={[14, 0, 0]} 
                             rotation={[0, -Math.PI / 2, 0]}
@@ -691,7 +701,7 @@ const Cube = () => {
                     <>
                         <LightsComponent colors={[0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0x00ffff, 0xff00ff]}/>
                         <animated.mesh scale={meshSpring2.scale} >
-                            <Carousel planes={planes} position={[-14, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
+                            <Carousel videos={videos} position={[-14, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
                         </animated.mesh>
                     </>
                 )}
@@ -699,7 +709,7 @@ const Cube = () => {
                     <>
                         <LightsComponent colors={[0xFFFFFF, 0xFF5733, 0x733D31, 0x6A452C, 0xA2684B, 0x3D2217]}/>
                         <animated.mesh scale={meshSpring3.scale} >
-                            <Carousel planes={planes} position={[0, 14, 0]} rotation={[Math.PI / 2, 0, angle]} />
+                            <Carousel videos={videos} position={[0, 14, 0]} rotation={[Math.PI / 2, 0, angle]} />
                         </animated.mesh>
                     </>
                 )}
@@ -707,7 +717,7 @@ const Cube = () => {
                     <>
                         <LightsComponent colors={[0x5F85BB, 0xFFFFFF, 0x05264E, 0x1A237E, 0x303F9F, 0x9FA8DA]}/>
                         <animated.mesh scale={meshSpring4.scale} >
-                            <Carousel planes={planes} position={[0, -14, 0]} rotation={[-Math.PI / 2, 0, angle]} />
+                            <Carousel videos={videos} position={[0, -14, 0]} rotation={[-Math.PI / 2, 0, angle]} />
                         </animated.mesh>
                     </>
                 )}
@@ -715,7 +725,7 @@ const Cube = () => {
                     <>
                         <LightsComponent colors={[0xF2AF06, 0xFFFFFF, 0xFDE06B, 0x999698, 0xFDC411, 0xC8C5C2]}/>
                         <animated.mesh scale={meshSpring5.scale} >
-                            <Carousel planes={planes} position={[0, 0, 14]} rotation={[0, Math.PI, 0]} />
+                            <Carousel videos={videos} position={[0, 0, 14]} rotation={[0, Math.PI, 0]} />
                         </animated.mesh>
                     </>
                 )}
@@ -723,7 +733,7 @@ const Cube = () => {
                     <>
                         <LightsComponent colors={[0x69F0AE, 0x76FF03, 0x388E3C, 0xFFFFFF, 0xC6FF00, 0xB9F6CA]}/>
                         <animated.mesh scale={meshSpring6.scale} >
-                            <Carousel planes={planes} position={[0, 0, -14]} rotation={[0, 0, 0]} />
+                            <Carousel videos={videos} position={[0, 0, -14]} rotation={[0, 0, 0]} />
                         </animated.mesh>
                     </>
                 )}

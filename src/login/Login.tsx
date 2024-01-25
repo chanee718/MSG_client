@@ -36,15 +36,18 @@ const Login: React.FC<LoginProps & { onJoinClick: () => void }> = ({ position, o
     event.preventDefault();
 
     // 로그인 로직 처리
-    const loginData = {
-        email,
-        password,
-    };
+    const formData = new FormData();
+    formData.append('id', email);
+    formData.append('password', password);
     try {
-        // 서버에 로그인 요청 보내기
-        // const response = await axios.post('http://172.10.7.55:80/login', loginData);
-        // // 로그인 성공 처리
-        // console.log('Login Successful:', response.data);
+        //서버에 로그인 요청 보내기
+        const response = await axios.post('http://172.10.7.58:80/user/login', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+      });
+        // 로그인 성공 처리
+        console.log('Login Successful:', response.data);
 
         logIn(email, remember);
         

@@ -5,6 +5,7 @@ import { Html } from '@react-three/drei';
 import './Join.css'
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
+import axios from "axios";
 
 type JoinProps = {
     position: [number, number, number];
@@ -18,17 +19,13 @@ const Join: React.FC<JoinProps> = ({ position, onGoToLogin }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirm, setConfirm] = useState<string>('');
-  const [profileImage, setProfileImage] = useState<null | File>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
-  const [isVisible, setIsVisible] = useState(false);
   
   const [hasfirstname, setHasfirstname] = useState<boolean>(true);
   const [haslastname, setHaslastname] = useState<boolean>(true);
   const [hasemail, setHasemail] = useState<boolean>(true);
   const [haspassword, setHaspassword] = useState<boolean>(true);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -45,52 +42,31 @@ const Join: React.FC<JoinProps> = ({ position, onGoToLogin }) => {
     }
     //서버에 보낼 data 정의
     const formData = new FormData();
-    
-    if (profileImage) {
-        formData.append('profileImage', profileImage);
-    }
     formData.append('firstname', firstname);
     formData.append('lastname', lastname);
-    formData.append('email', email);
+    formData.append('id', email);
     formData.append('password', password);
+    
 
-    console.log(formData)
+    Array.from(formData).forEach(([key, value]) => {
+        console.log(key, value);
+      });
 
-    // try {
-    //     if (!hasfirstname || !haslastname || !hasemail || !hasoneliner || !haspassword) return;
-    //     const response = await axios.post('http://172.10.7.55:80/register', formData, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data'
-    //         }
-    //     });
-    //     console.log(response.data);
-    //     alert('Your account was successfully confirmed.'); // 알림 표시
-    //     navigate('/login'); // 로그인 페이지로 리디렉트
-    //     // 여기에서 서버로부터 반환된 이미지 URL을 처리할 수 있습니다.
-    // } catch (error) {
-    //     console.error('There was an error!', error);
-    // }
-    alert('Your account is successfully confirmed.');
-    onGoToLogin();
+    try {
+        if (!hasfirstname || !haslastname || !hasemail || !haspassword) return;
+        const response = await axios.post('http://172.10.7.58:80/user/signup', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        console.log(response.data);
+        alert('Your account is successfully confirmed.');
+        onGoToLogin();
+    } catch (error) {
+        console.error('There was an error!', error);
+    }
     
 };
-
-// const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files && e.target.files[0]) {
-//         const file = e.target.files[0];
-//         setProfileImage(file);
-
-//         // 이미지 미리보기 생성
-//         const reader = new FileReader();
-//         reader.onload = () => setPreviewUrl(reader.result as string);
-//         reader.readAsDataURL(file);
-//     }
-// };
-
-// const handleClick = () => {
-//     // 숨겨진 파일 입력 활성화
-//     fileInputRef.current?.click();
-// };
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -116,7 +92,7 @@ const Join: React.FC<JoinProps> = ({ position, onGoToLogin }) => {
             </IconButton>
             <div className="Join">
                 <form className="join-form">
-                    <h1>Sign up to ~~</h1>
+                    <h1>Sign up to MSG</h1>
                     <div className='name-group'>
                         <div className='join-group'>
                             <label htmlFor='firstname'>First Name</label>

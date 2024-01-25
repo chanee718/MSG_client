@@ -1,0 +1,65 @@
+.SV {
+    background: 'transparent';
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.showvideo {
+    display: flex; /* flexbox 레이아웃 사용 */
+    flex-direction: column;
+    justify-content: center; /* 양 끝에 요소 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+    width: 40vw;
+    height: 60vh;
+    margin-top: 1%;
+}
+
+.showvideo video {
+    width: 100%; /* 상자의 너비에 맞추기 */
+    height: 100%; /* 높이를 200px로 고정 */
+    object-fit: cover; /* 비디오나 이미지를 상자에 꽉 차게 만들기 */
+}
+
+.explain {
+    width: 100%;
+    display: flex; /* flexbox 레이아웃 사용 */
+    justify-content: space-between;
+    padding: 0;
+    margin-top: 1%;
+}
+
+.ta {
+    width:80%;
+    margin-left: 3%;
+    text-align: left;
+    display: flex; /* flexbox 레이아웃 사용 */
+    flex-direction: column;
+}
+
+.ta h2 {
+    color: white;
+    font-family: Bold;
+    font-size: 1.2rem;
+}
+
+.ta p {
+    margin-left: 3%;
+    color: white;
+    font-family: Thin;
+    font-size: 0.9rem;
+    margin-top: 0%;
+}
+
+.ta p span{
+    font-family: Regular;
+}
+
+.g {
+    text-align: right;
+    color: white;
+    font-family: Bold;
+    font-size: 0.9rem;
+}
+
+

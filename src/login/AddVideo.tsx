@@ -29,6 +29,14 @@ const AddVideo: React.FC<AddVideoProps> = ({ position, onChangePage }) => {
   const [artist, setArtist] = useState('');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const userEmail = localStorage.getItem('loginMail') || sessionStorage.getItem('loginMail');
+
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+  const handleArtist = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setArtist(e.target.value);
+  };
 
   useEffect(() => {
     if (videoFile) {
@@ -69,7 +77,7 @@ const AddVideo: React.FC<AddVideoProps> = ({ position, onChangePage }) => {
       formData.append('artist', artist);
       formData.append('selectedTag', selectedTag);
 
-      const response = await axios.post('http://localhost:3001/contents/uploadVideo', formData, {
+      const response = await axios.post('http://172.10.7.58:80/contents/uploadVideo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -82,19 +90,30 @@ const AddVideo: React.FC<AddVideoProps> = ({ position, onChangePage }) => {
       // setVideoUrls((prevVideoUrls) => [...prevVideoUrls, response.data?.videoUrl || null]);
       // contentsId를 서버에 전달하여 컨텐츠 저장
       const contentsId = response.data?.contentsId;
+
+      const formData2 = new FormData();
+      formData2.append('email', userEmail || '');
+      formData2.append('contentsId', contentsId);
+      console.log(userEmail);
       console.log(contentsId);
       if (contentsId) {
-        await axios.post('http://localhost:3001/contents/postmycontents', {
+        await axios.post('http://172.10.7.58:80/contents/postmycontents', formData2, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
           withCredentials: true,
         });
       }
-    } catch (error) {
+      alert("Video Uploaded!"); 
+      onChangePage(PageState.Main);
+    } catch (error) { 
+      alert("Video Upload failed!");
       console.error('Error uploading videos:', error);
     }
   };
 
   return (
-    <Html position={position} style={{ transform: "translate(-50%, -50%)" }}>
+    <Html position={position} style={{ transform: "translate(-50%, -58%)" }}>
         <div className="UV">
             <div className="UVtop">
                 <h2>Upload Video</h2>
@@ -117,30 +136,41 @@ const AddVideo: React.FC<AddVideoProps> = ({ position, onChangePage }) => {
                 </div>
                 
                 <div className='UVprofile'>
-                    <TextField label="Title" variant="standard" className="tf" value={title} onChange={(e) => setTitle(e.target.value)} />
-                    <TextField label="Artist" variant="standard" className="tf" value={artist} onChange={(e) => setArtist(e.target.value)} />
-                    <FormControl variant="standard" className="select-standard">
-                        <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-standard-label"
-                            id="demo-simple-select-standard"
-                            value={selectedTag}
-                            onChange={handleChange}
-                            label="Genre"
-                        >
-                        <MenuItem value={"기타"}>Guitar</MenuItem>
-                        <MenuItem value={"키보드"}>Keyboard</MenuItem>
-                        <MenuItem value={"드럼"}>Drum</MenuItem>
-                        <MenuItem value={"베이스"}>Bass</MenuItem>
-                        <MenuItem value={"밴드"}>Band</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <TextField label="Title" variant="outlined" className="tf" onInput={handleTitle} />
+                    <TextField label="Artist" variant="outlined" className="tf" onInput={handleArtist} />
                 </div>
             </div>
             <div className='UVbottom'>
-            <Button variant="outlined" startIcon={<FileUpload />} className='ub' style={{color:"orangered", borderColor:"orangered", fontFamily: "Bold"}}>
-                Upload
-            </Button>
+              <FormControl className="select-standard">
+                <InputLabel id="demo-simple-select-standard-label" style={{color: "white"}}>Genre</InputLabel>
+                <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={selectedTag}
+                    onChange={handleChange}
+                    label="Genre"
+                    MenuProps={{
+                      anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "left"
+                      },
+                      transformOrigin: {
+                        vertical: "top",
+                        horizontal: "left"
+                      },
+                    }}
+                >
+                <MenuItem className="custom-menu-item" value={"기타"}>Guitar</MenuItem>
+                <MenuItem className="custom-menu-item" value={"키보드"}>Keyboard</MenuItem>
+                <MenuItem className="custom-menu-item" value={"드럼"}>Drum</MenuItem>
+                <MenuItem className="custom-menu-item" value={"베이스"}>Bass</MenuItem>
+                <MenuItem className="custom-menu-item" value={"밴드"}>Band</MenuItem>
+                </Select>
+              </FormControl>
+              
+              <Button variant="outlined" startIcon={<FileUpload />} onClick={handleUpload} className='ub' style={{color:"orangered", borderColor:"orangered", fontFamily: "Bold", zIndex: '1'}}>
+                  Upload
+              </Button>
             </div>
         </div>
         <IconButton aria-label="editprofile" onClick={() => onChangePage(PageState.Main)} style={{ color: "#FFFFFF", marginRight: '3%', position: 'absolute', left: '3%', top: '-1%' }}>
